@@ -3,8 +3,13 @@ body {
 }
 
 .container {
-  max-width: 768px;
+  max-width: 750px;
 }
 
 todo {
+}
+
+.badge {
+  min-width: 40px;
+  font-size: 35px;
 }

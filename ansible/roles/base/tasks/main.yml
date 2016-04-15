@@ -1,0 +1,8 @@
+# Basic packages
+# ====================================================
+
+- name: Install essential packages
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - build-essential
+    - git-core

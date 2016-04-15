@@ -1,0 +1,52 @@
+{
+  "name": "nodejs-template-project",
+  "version": "0.0.1",
+  "description": "NodeJS template project.",
+  "author": "Marko Klemetti <marko.klemetti@gmail.com>",
+  "license": "",
+  "repository": {
+    "type": "git",
+    "url": "https://app.deveo.com/eficode/projects/example_projects/repositories/nodejs-template-project"
+  },
+  "main": "server.js",
+  "scripts": {
+    "test:xunit": "DATABASE_URL=${DATABASE_URL:-postgres://nodejs_template_project:nodejs_template_project@localhost/nodejs_template_project_test} ./node_modules/mocha/bin/mocha -R xunit > test-results.xml",
+    "test": "DATABASE_URL=${DATABASE_URL:-postgres://nodejs_template_project:nodejs_template_project@localhost/nodejs_template_project_test} ./node_modules/mocha/bin/mocha"
+  },
+  "engines": {
+    "node": ">=4.1.1"
+  },
+  "dependencies": {
+    "bcrypt": "latest",
+    "gulp": "^3.9.0",
+    "gulp-apidoc": "^0.2.0",
+    "gulp-jshint": "^2.0.0",
+    "jshint": "^2.9.1-rc1",
+    "koa": "^1.1.2",
+    "koa-bodyparser": "^2.0.1",
+    "koa-cors": "0.0.16",
+    "koa-generic-session": "^1.10.0",
+    "koa-logger": "^1.3.0",
+    "koa-mount": "^1.3.0",
+    "koa-passport": "^1.2.0",
+    "koa-router": "^5.3.0",
+    "koa-session-sequelize": "https://github.com/skv-headless/koa-session-sequelize/tarball/master",
+    "koa-static": "^2.0.0",
+    "koa-validate": "^0.2.11",
+    "lodash": "^4.8.2",
+    "passport-facebook-token": "^3.0.6",
+    "passport-local-sequelize": "^0.6.0",
+    "pg": "^4.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.20.0"
+  },
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "co-mocha": "^1.1.2",
+    "co-supertest": "0.0.10",
+    "methods": "^1.1.1",
+    "mocha": "^2.4.5",
+    "request": "^2.67.0",
+    "supertest": "^1.1.0"
+  }
+}

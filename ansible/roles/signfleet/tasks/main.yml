@@ -1,0 +1,8 @@
+---
+- name: Create test database
+  become_user: postgres
+  postgresql_db: name=nodejs_template_project_test
+
+- name: Add database user
+  become_user: postgres
+  postgresql_user: db=nodejs_template_project_test name=nodejs_template_project password=nodejs_template_project priv=ALL

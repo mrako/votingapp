@@ -32,7 +32,7 @@ describe('Vote', function() {
 
   it("should create a vote for user", function *() {
     var url = `/api/v1/votes`;
-    var params = {projectId: project.id, points: 3};
+    var params = {projectId: project.id, voter: "tomme", points: 3};
 
     yield helpers.login(agent, user);
     yield agent.post(url).send(params).expect(201).end();

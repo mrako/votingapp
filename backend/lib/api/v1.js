@@ -11,6 +11,8 @@ require('../validator');
 var config = require('../config');
 
 var auth = require('../controllers/auth');
+var projects = require('../controllers/projects');
+var votes = require('../controllers/votes');
 
 var errorMiddleware = require('../client-error').middleware;
 
@@ -33,6 +35,11 @@ publicRouter.post('/login', auth.login);
 publicRouter.post('/logout', auth.logout);
 publicRouter.post('/signup', auth.signUp);
 publicRouter.post('/facebook/signin', auth.facebookSignIn);
+
+publicRouter.get('/projects', projects.all);
+
+publicRouter.get('/results', votes.results);
+
 app.use(publicRouter.middleware());
 
 app.use(auth.authenticatedMiddleware);
@@ -40,5 +47,7 @@ app.use(auth.authenticatedMiddleware);
 var privateRouter = new Router();
 
 privateRouter.get('/users/me', auth.current);
+
+privateRouter.post('/votes', votes.create);
 
 app.use(privateRouter.middleware());

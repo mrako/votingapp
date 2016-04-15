@@ -1,26 +1,32 @@
 <projects-list>
   <h3>{opts.title}</h3>
 
-  <ul>
-    <li each={ items.filter(whatShow) }>
-      <label class={ completed: done }>
-        <input type="checkbox" checked={ done } onclick={ parent.toggle }> { title }
-      </label>
+  <ul class="list-group">
+    <li class="list-group-item { active: points > 0 }" each={ items.filter(whatShow) } onclick={ parent.toggle }>
+      <span class="badge" if={ points > 0 }>{ points }</span>
+      { title }
     </li>
   </ul>
 
   <form onsubmit={ add }>
-    <input name="input" onkeyup={ edit }>
-    <button disabled={ !text }>Add #{ items.filter(whatShow).length + 1 }</button>
+    <button class="btn btn-success">Submit</button>
 
-    <button disabled={ items.filter(onlyDone).length == 0 } onclick={ removeAllDone }>
-    X{ items.filter(onlyDone).length } </button>
+    <button onclick={ reset } class="btn btn-danger">cancel</button>
   </form>
 
 
   <!-- this script tag is optional -->
   <script>
     this.items = opts.items
+
+    this.votes = []
+
+    function pointsFor(item, votes) {
+      var index = votes.indexOf(item)
+      if(index >= 0) {
+        return 5 - index * 2
+      }
+    }
 
     edit(e) {
       this.text = e.target.value
@@ -39,19 +45,24 @@
       })
     }
 
-    // an two example how to filter items on the list
     whatShow(item) {
       return !item.hidden
     }
 
-    onlyDone(item) {
-      return item.done
+    reset() {
+      this.votes = []
+      for(i in this.items) {
+        this.items[i].points = 0
+      }
     }
 
     toggle(e) {
       var item = e.item
-      item.done = !item.done
-      return true
+
+      if (this.votes.length < 3 && this.votes.indexOf(item) < 0) {
+        this.votes.push(item)
+        item.points = pointsFor(item, this.votes)
+      }
     }
   </script>
 </projects-list>

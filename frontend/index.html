@@ -10,7 +10,9 @@
 
 <body>
     <!-- mount point -->
-    <projects-list></projects-list>
+    <div class="container">
+      <projects-list></projects-list>
+    </div>
     <!-- include riot.js and the compiler -->
     <script src="../node_modules/riot/riot.min.js"></script>
     <script src="../dist/js/projects-list.js"></script>
@@ -33,10 +35,9 @@
             title: 'Projects',
             projects: projects,
             items: [
-              { title: 'Avoid excessive caffeine', done: true },
-              { title: 'Hidden item',  hidden: true },
-              { title: 'Be less provocative'  },
-              { title: 'Be nice to people' }
+              { title: 'Project 1', points: 0 },
+              { title: 'Project 2', points: 0 },
+              { title: 'Project 3', points: 0 }
             ]
         });
     }

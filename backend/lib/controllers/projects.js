@@ -6,16 +6,11 @@ var form = require('../form');
 
 var LIMIT = require('../config').DEFAULT_LIMIT;
 
-var projects = [
-    {name: "projekti 1", team: "tomme + kivi"},
-    {name: "projekti 2", team: "kivi + kunu"}
-];
-
 function *toJSON(project) {
   return {
     id: project.id,
-    name: project.name,
-    model: project.team
+    title: project.title,
+    team: project.team
   };
 }
 
@@ -27,10 +22,6 @@ function *toJSON(project) {
  *
  */
 exports.all = function *() {
-  if (this.errors) {
-    throw new ClientError('VALIDATION_ERROR', 400, this.errors);
-  }
-
   var result;
   var query = this.query || {};
   var limit = query.limit || query.max || LIMIT;
@@ -38,8 +29,7 @@ exports.all = function *() {
 
   var options = {
     limit: limit,
-    offset: offset,
-    where: {}
+    offset: offset
   };
 
   result = yield database.Project.findAndCountAll(options);
@@ -63,19 +53,19 @@ exports.all = function *() {
  * @apiGroup project
  * @apiPermission user
  *
- * @apiParam {String} name project name.
+ * @apiParam {String} title project title.
  * @apiParam {String} team project team.
  *
  */
 exports.create = function *() {
-  this.checkBody('name').notEmpty().isString();
+  this.checkBody('title').notEmpty().isString();
   this.checkBody('team').notEmpty().isString();
 
   if (this.errors) {
     throw new ClientError('VALIDATION_ERROR', 400, this.errors);
   }
 
-  var attributes = form(this.request.body, ['name', 'team']);
+  var attributes = form(this.request.body, ['title', 'team']);
   var project = database.Project.build(attributes);
 
   try {

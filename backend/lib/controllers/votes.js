@@ -53,7 +53,7 @@ exports.results = function *() {
  *
  */
 exports.create = function *() {
-  this.checkBody('title').notEmpty();
+  this.checkBody('projectId').notEmpty();
   this.checkBody('voter').notEmpty();
   this.checkBody('points').notEmpty();
 
@@ -61,7 +61,7 @@ exports.create = function *() {
     throw new ClientError('VALIDATION_ERROR', 400, this.errors);
   }
 
-  var attributes = form(this.request.body, ['voter', 'points']);
+  var attributes = form(this.request.body, ['voter', 'points', 'projectId']);
   var vote = database.Vote.build(attributes);
 
   try {

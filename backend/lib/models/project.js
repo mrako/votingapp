@@ -4,7 +4,7 @@ var Sequelize = require('sequelize');
 var sequelize = require('./sequelize');
 
 var Project = sequelize.define('project', {
-  name: Sequelize.STRING,
+  title: Sequelize.STRING,
   team: Sequelize.STRING
 });
 

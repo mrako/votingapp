@@ -8,7 +8,6 @@ var User = exports.User = require('./models/user');
 var Project = exports.Project = require('./models/project');
 var Vote = exports.Vote = require('./models/vote');
 
-Vote.belongsTo(User);
 Vote.belongsTo(Project);
 
 exports.sessionStore = sequelizeStore.create(sequelize, {

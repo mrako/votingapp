@@ -8,8 +8,13 @@
     </li>
   </ul>
 
-  <form onsubmit={ add }>
-    <button class="btn btn-success">Submit</button>
+  <form onsubmit={ add } class="form-inline">
+    <div class="form-group">
+      <label class="sr-only" for="name">Sun nimi</label>
+      <input name="name" type="text" class="form-control" id="name" placeholder="Sun nimi">
+    </div>
+
+    <button class="btn btn-success">Lähetä</button>
 
     <button onclick={ reset } class="btn btn-danger">cancel</button>
   </form>
@@ -28,21 +33,24 @@
       }
     }
 
-    edit(e) {
-      this.text = e.target.value
-    }
-
     add(e) {
-      if (this.text) {
-        this.items.push({ title: this.text })
-        this.text = this.input.value = ''
-      }
-    }
+      for(i in this.votes) {
+        var data = new FormData
 
-    removeAllDone(e) {
-      this.items = this.items.filter(function(item) {
-        return !item.done
-      })
+        var item = this.items[i]
+        data.append('voter', e.target[0])
+        data.append('title', item.title)
+        data.append('points', item.points)
+
+        var request = new XMLHttpRequest()
+        request.open('POST', opts.url, true)
+        request.onload = function() {
+          if (request.status >= 200 && request.status < 400) {
+            console.log("voted" + item.title)
+          }
+        }
+        request.send(data)
+      }
     }
 
     whatShow(item) {

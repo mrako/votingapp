@@ -53,14 +53,15 @@ exports.results = function *() {
  *
  */
 exports.create = function *() {
-  this.checkBody('projectId').notEmpty();
+  this.checkBody('title').notEmpty();
+  this.checkBody('voter').notEmpty();
   this.checkBody('points').notEmpty();
 
   if (this.errors) {
     throw new ClientError('VALIDATION_ERROR', 400, this.errors);
   }
 
-  var attributes = form(this.request.body, ['projectId', 'points'], { userId: this.passport.user.id });
+  var attributes = form(this.request.body, ['voter', 'points']);
   var vote = database.Vote.build(attributes);
 
   try {

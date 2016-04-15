@@ -1,4 +1,4 @@
-riot.tag2('projects-list', '<h3>{opts.title}</h3> <ul class="list-group"> <li class="list-group-item {active: points > 0}" each="{items.filter(whatShow)}" onclick="{parent.toggle}"> <span class="badge" if="{points > 0}">{points}</span> {title} </li> </ul> <form onsubmit="{add}"> <button class="btn btn-success">Submit</button> <button onclick="{reset}" class="btn btn-danger">cancel</button> </form>', '', '', function(opts) {
+riot.tag2('projects-list', '<h3>{opts.title}</h3> <ul class="list-group"> <li class="list-group-item {active: points > 0}" each="{items.filter(whatShow)}" onclick="{parent.toggle}"> <span class="badge" if="{points > 0}">{points}</span> {title} </li> </ul> <form onsubmit="{add}" class="form-inline"> <div class="form-group"> <label class="sr-only" for="name">Sun nimi</label> <input name="name" type="text" class="form-control" id="name" placeholder="Sun nimi"> </div> <button class="btn btn-success">Lähetä</button> <button onclick="{reset}" class="btn btn-danger">cancel</button> </form>', '', '', function(opts) {
     this.items = opts.items
 
     this.votes = []
@@ -10,21 +10,24 @@ riot.tag2('projects-list', '<h3>{opts.title}</h3> <ul class="list-group"> <li cl
       }
     }
 
-    this.edit = function(e) {
-      this.text = e.target.value
-    }.bind(this)
-
     this.add = function(e) {
-      if (this.text) {
-        this.items.push({ title: this.text })
-        this.text = this.input.value = ''
-      }
-    }.bind(this)
+      for(i in this.votes) {
+        var data = new FormData
 
-    this.removeAllDone = function(e) {
-      this.items = this.items.filter(function(item) {
-        return !item.done
-      })
+        var item = this.items[i]
+        data.append('voter', e.target[0])
+        data.append('title', item.title)
+        data.append('points', item.points)
+
+        var request = new XMLHttpRequest()
+        request.open('POST', opts.url, true)
+        request.onload = function() {
+          if (request.status >= 200 && request.status < 400) {
+            console.log("voted" + item.title)
+          }
+        }
+        request.send(data)
+      }
     }.bind(this)
 
     this.whatShow = function(item) {

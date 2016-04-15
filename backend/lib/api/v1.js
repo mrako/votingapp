@@ -39,6 +39,7 @@ publicRouter.post('/facebook/signin', auth.facebookSignIn);
 publicRouter.get('/projects', projects.all);
 
 publicRouter.get('/results', votes.results);
+publicRouter.post('/votes', votes.create);
 
 app.use(publicRouter.middleware());
 
@@ -48,6 +49,5 @@ var privateRouter = new Router();
 
 privateRouter.get('/users/me', auth.current);
 
-privateRouter.post('/votes', votes.create);
 
 app.use(privateRouter.middleware());

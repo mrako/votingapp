@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Tomme</title>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="app/css/main.css" />
+</head>
+
+<body>
+    <!-- mount point -->
+    <projects-list></projects-list>
+    <!-- include riot.js and the compiler -->
+    <script src="../node_modules/riot/riot.min.js"></script>
+    <script src="../dist/js/projects-list.js"></script>
+    <!-- mount normally -->
+    <script>
+    var xmlhttp = new XMLHttpRequest();
+    var url = "http://localhost:8080/api/v1/projects";
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var response = JSON.parse(xmlhttp.responseText);
+            loadProjects(response.results);
+        }
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+
+    function loadProjects(projects) {
+        riot.mount('projects-list', {
+            title: 'Projects',
+            projects: projects,
+            items: [
+              { title: 'Avoid excessive caffeine', done: true },
+              { title: 'Hidden item',  hidden: true },
+              { title: 'Be less provocative'  },
+              { title: 'Be nice to people' }
+            ]
+        });
+    }
+    </script>
+</body>
+
+</html>

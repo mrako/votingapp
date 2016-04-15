@@ -1,7 +1,7 @@
 {
-  "name": "nodejs-template-project",
+  "name": "votingapp-backend",
   "version": "0.0.1",
-  "description": "NodeJS template project.",
+  "description": "Voting App Backend",
   "author": "Marko Klemetti <marko.klemetti@gmail.com>",
   "license": "",
   "repository": {

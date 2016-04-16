@@ -65,12 +65,12 @@ describe('Vote', function() {
     var voter = 'tomme@email.com'
     var url = `/api/v1/votes/${voter}/allowed`;
     
-    yield agent.get(url).expect(400).end();
+    yield agent.get(url).expect(405).end();
   });
 
   it("should not create fourth vote", function *() {
     var url = `/api/v1/votes`;
     
-    yield agent.post(url).send({projectId: project3.id, voter: "tomme@email.com", points: 1}).expect(400).end();
+    yield agent.post(url).send({projectId: project3.id, voter: "tomme@email.com", points: 1}).expect(405).end();
   });
 });

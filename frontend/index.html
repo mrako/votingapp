@@ -21,7 +21,7 @@
     <!-- mount normally -->
     <script>
     var xmlhttp = new XMLHttpRequest();
-    var url = "http://localhost:8080/api/v1/projects";
+    var url = "http://backend:8080/api/v1/projects";
 
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -36,7 +36,7 @@
         riot.mount('projects-list', {
             title: 'Äänestä kolmea suosikkiasi',
             projects: projects,
-            url: 'http://localhost:8080/api/v1/votes'
+            url: 'http://backend:8080/api/v1/votes'
         });
     }
     </script>

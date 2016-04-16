@@ -10,9 +10,9 @@ backend:
     - ./backend:/usr/src/app
 
 frontend:
-  build: backend
+  build: frontend
   links:
-   - db
+   - backend
   ports:
    - "3000:3000"
   volumes:

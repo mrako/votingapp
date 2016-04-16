@@ -12,8 +12,8 @@ This app is the NodeJS backend example project using Koa.
 
 ## Init database
 
-    psql -c "CREATE ROLE nodejs_template_project WITH CREATEDB LOGIN PASSWORD 'nodejs_template_project'"
-    psql -c "CREATE DATABASE nodejs_template_project WITH OWNER nodejs_template_project"
+    psql -c "CREATE ROLE votingapp WITH CREATEDB LOGIN PASSWORD 'votingapp'"
+    psql -c "CREATE DATABASE votingapp WITH OWNER votingapp"
 
 ## Request examples
 

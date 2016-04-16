@@ -12,6 +12,29 @@ var form = require('../form');
  * @apiGroup projects
  *
  */
+exports.allowed = function *() {
+  var result;
+
+  var options = {
+    where: {voter: this.params.email}
+  };
+
+  result = yield database.Vote.findAndCountAll(options);
+
+  if (result.count < 3) {
+    this.status = 200;
+  } else {
+    throw new ClientError('VALIDATION_ERROR', 400, 'voting not allowed for ' + this.params.email);
+  }
+};
+
+/**
+ * @api {get} /api/v1/results Read results
+ * @apiVersion 0.0.1
+ * @apiName GetResults
+ * @apiGroup results
+ *
+ */
 exports.results = function *() {
   if (this.errors) {
     throw new ClientError('VALIDATION_ERROR', 400, this.errors);
@@ -62,13 +85,27 @@ exports.create = function *() {
   }
 
   var attributes = form(this.request.body, ['voter', 'points', 'projectId']);
-  var vote = database.Vote.build(attributes);
 
-  try {
-    yield vote.save();
-  } catch (err) {
-    throw new ClientError('SAVING_ERROR');
+  var result;
+
+  var options = {
+    where: {voter: attributes.voter}
+  };
+
+  result = yield database.Vote.findAndCountAll(options);
+
+  if (result.count < 3) {
+    var vote = database.Vote.build(attributes);
+
+    try {
+      yield vote.save();
+    } catch (err) {
+      throw new ClientError('SAVING_ERROR');
+    }
+
+    this.status = 201;
+  } else {
+    throw new ClientError('VALIDATION_ERROR', 400, 'voting not allowed for ' + this.params.voter);
   }
 
-  this.status = 201;
 };

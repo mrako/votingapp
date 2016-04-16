@@ -24,7 +24,7 @@ exports.allowed = function *() {
   if (result.count < 3) {
     this.status = 200;
   } else {
-    throw new ClientError('VALIDATION_ERROR', 400, 'voting not allowed for ' + this.params.email);
+    throw new ClientError('VALIDATION_ERROR', 405, 'voting not allowed for ' + this.params.email);
   }
 };
 
@@ -105,7 +105,7 @@ exports.create = function *() {
 
     this.status = 201;
   } else {
-    throw new ClientError('VALIDATION_ERROR', 400, 'voting not allowed for ' + this.params.voter);
+    throw new ClientError('VALIDATION_ERROR', 405, 'voting not allowed for ' + this.params.voter);
   }
 
 };

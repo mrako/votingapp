@@ -72,7 +72,7 @@
 
         xmlhttp.onload = function() {
           if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
-            voted++
+            votesSent++
             if (votesSent == 3) {
               reset()
               self.voted = true

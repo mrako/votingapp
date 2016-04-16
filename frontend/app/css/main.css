@@ -9,6 +9,10 @@ body {
 todo {
 }
 
+.form-control {
+  width: 250px !important;
+}
+
 .badge {
   min-width: 40px;
   font-size: 35px;

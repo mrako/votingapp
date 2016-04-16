@@ -35,7 +35,6 @@
     <h3>Kiitos äänestyksestäsi!</h3>
   </div>
 
-  <!-- this script tag is optional -->
   <script>
     var self = this
 
@@ -65,6 +64,8 @@
       votesSent = 0
       for(i in self.votes) {
         var item = self.votes[i]
+
+        console.log("sending");
 
         var xmlhttp = new XMLHttpRequest()
         xmlhttp.open("POST", opts.url, true)
@@ -103,8 +104,10 @@
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             send()
-          } else {
-            self.voted = true
+          }
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 405) {
+            self.errors.push({message: "Olet jo äänestänyt"})
+            self.update()
           }
         }
         xmlhttp.open("GET", url, true)

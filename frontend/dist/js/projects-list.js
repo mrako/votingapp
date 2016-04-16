@@ -28,6 +28,8 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
       for(i in self.votes) {
         var item = self.votes[i]
 
+        console.log("sending");
+
         var xmlhttp = new XMLHttpRequest()
         xmlhttp.open("POST", opts.url, true)
 
@@ -65,8 +67,10 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             send()
-          } else {
-            self.voted = true
+          }
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 405) {
+            self.errors.push({message: "Olet jo äänestänyt"})
+            self.update()
           }
         }
         xmlhttp.open("GET", url, true)

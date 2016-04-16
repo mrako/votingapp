@@ -13,3 +13,12 @@ todo {
   min-width: 40px;
   font-size: 35px;
 }
+
+h1 {
+  text-align: center;
+  margin: 40px 0;
+}
+
+h3 {
+  text-align: center;
+}

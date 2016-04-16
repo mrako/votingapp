@@ -4,27 +4,35 @@
 
   <errors></errors>
 
-  <authorize></authorize>
+  <messages></messages>
 
-  <form onsubmit={ add } class="form-inline pull-right">
-    <div class="form-group">
-      <input name="name" type="text" class="form-control" placeholder="Sun nimi" value={email}>
+  <div if={ !voted }>
+    <authorize></authorize>
+
+    <form onsubmit={ add } class="form-inline pull-right">
+      <div class="form-group">
+        <input name="name" type="text" class="form-control" placeholder="Sähköposti" value={email}>
+      </div>
+
+      <button class="btn btn-success">Lähetä</button>
+
+      <button onclick={ resetForm } class="btn btn-danger">Peruuta</button>
+    </form>
+
+    <div class="clearfix"></div>
+    <hr/>
+
+    <div class="list-group">
+      <a href="#" class="list-group-item { active: points > 0 }" each={ opts.projects.filter(whatShow) } onclick={ parent.toggle }>
+      <span class="badge" if={ points > 0 }>{ points }</span>
+        <h4 class="list-group-item-heading">{ title }</h4>
+        <p class="list-group-item-text">{ team }</p>
+      </a>
     </div>
+  </div>
 
-    <button class="btn btn-success">Lähetä</button>
-
-    <button onclick={ reset } class="btn btn-danger">Peruuta</button>
-  </form>
-
-  <div class="clearfix"></div>
-  <hr/>
-
-  <div class="list-group">
-    <a href="#" class="list-group-item { active: points > 0 }" each={ opts.projects.filter(whatShow) } onclick={ parent.toggle }>
-    <span class="badge" if={ points > 0 }>{ points }</span>
-      <h4 class="list-group-item-heading">{ title }</h4>
-      <p class="list-group-item-text">{ team }</p>
-    </a>
+  <div if={ voted }>
+    <h3>Kiitos äänestyksestäsi!</h3>
   </div>
 
   <!-- this script tag is optional -->
@@ -36,7 +44,10 @@
     this.user = this.email = ""
 
     this.errors = []
+    this.messages = []
     this.votes = []
+
+    this.voted = false
 
     function pointsFor(item, votes) {
       var index = votes.indexOf(item)
@@ -45,7 +56,35 @@
       }
     }
 
-    function validate() {
+    setEmail(email) {
+      self.user = self.email = email
+      self.update()
+    }
+
+    function send() {
+      votesSent = 0
+      for(i in self.votes) {
+        var item = self.votes[i]
+
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.open("POST", opts.url, true)
+
+        xmlhttp.onload = function() {
+          if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
+            voted++
+            if (votesSent == 3) {
+              reset()
+              self.voted = true
+            }
+          }
+        }
+
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({voter: self.user, points: item.points, projectId: item.id}))
+      }
+    }
+
+    add(e) {
       error = false
 
       if (self.votes.length < 3) {
@@ -57,47 +96,39 @@
         error = true
       }
 
-      return !error
-    }
+      if (!error) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "http://localhost:8080/api/v1/votes/" + self.user + "/allowed";
 
-    setEmail(email) {
-      self.user = self.email = email
-      self.update()
-    }
-
-    add(e) {
-      if (!validate()) {
-        return false
-      }
-      for(i in this.votes) {
-        var item = this.votes[i]
-
-        var xmlhttp = new XMLHttpRequest()
-        xmlhttp.open("POST", opts.url, true)
-
-        xmlhttp.onload = function() {
-          if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
-            console.log("voted" + item.title)
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            send()
+          } else {
+            self.messages = [{message: "Olet jo äänestänyt"}]
+            self.voted = true
           }
         }
-
-        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xmlhttp.send(JSON.stringify({voter: self.user, points: item.points, projectId: item.id}))
+        xmlhttp.open("GET", url, true)
+        xmlhttp.send()
       }
-
-      reset()
     }
 
     whatShow(item) {
       return !item.hidden
     }
 
-    reset() {
-      this.votes = []
-      this.user = this.email = ""
-      for(i in this.items) {
-        this.items[i].points = 0
+    resetForm(e) {
+      reset()
+    }
+
+    function reset() {
+      self.errors = []
+      self.votes = []
+      self.user = self.email = ""
+      for(i in self.items) {
+        self.items[i].points = 0
       }
+      self.update()
     }
 
     toggle(e) {
@@ -129,8 +160,26 @@
   </script>
 </errors>
 
+<messages>
+  <div class="alert alert-danger" role="alert" each={ parent.messages }>
+    <a href="#" class="close" onclick={close}>&times;</a>
+    {message}
+  </div>
+
+  <script>
+    var self = this
+
+    close(e) {
+      var index = self.parent.messages.indexOf(e.item);
+      if (index > -1) {
+        self.parent.messages.splice(index, 1);
+      }
+    }
+  </script>
+</messages>
+
 <authorize>
-  <button class="btn btn-success" onclick={auth}>Authorize</button>
+  <button class="btn btn-success" onclick={auth}>Hae sähköpostisi googlesta</button>
 
   <script>
     var self = this

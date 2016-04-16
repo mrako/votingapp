@@ -1,4 +1,4 @@
-riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <authorize></authorize> <form onsubmit="{add}" class="form-inline pull-right"> <div class="form-group"> <input name="name" type="text" class="form-control" placeholder="Sun nimi" value="{email}"> </div> <button class="btn btn-success">Lähetä</button> <button onclick="{reset}" class="btn btn-danger">Peruuta</button> </form> <div class="clearfix"></div> <hr> <div class="list-group"> <a href="#" class="list-group-item {active: points > 0}" each="{opts.projects.filter(whatShow)}" onclick="{parent.toggle}"> <span class="badge" if="{points > 0}">{points}</span> <h4 class="list-group-item-heading">{title}</h4> <p class="list-group-item-text">{team}</p> </a> </div>', '', '', function(opts) {
+riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messages></messages> <div if="{!voted}"> <authorize></authorize> <form onsubmit="{add}" class="form-inline pull-right"> <div class="form-group"> <input name="name" type="text" class="form-control" placeholder="Sähköposti" value="{email}"> </div> <button class="btn btn-success">Lähetä</button> <button onclick="{resetForm}" class="btn btn-danger">Peruuta</button> </form> <div class="clearfix"></div> <hr> <div class="list-group"> <a href="#" class="list-group-item {active: points > 0}" each="{opts.projects.filter(whatShow)}" onclick="{parent.toggle}"> <span class="badge" if="{points > 0}">{points}</span> <h4 class="list-group-item-heading">{title}</h4> <p class="list-group-item-text">{team}</p> </a> </div> </div> <div if="{voted}"> <h3>Kiitos äänestyksestäsi!</h3> </div>', '', '', function(opts) {
     var self = this
 
     this.items = opts.projects
@@ -6,7 +6,10 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <author
     this.user = this.email = ""
 
     this.errors = []
+    this.messages = []
     this.votes = []
+
+    this.voted = false
 
     function pointsFor(item, votes) {
       var index = votes.indexOf(item)
@@ -15,7 +18,35 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <author
       }
     }
 
-    function validate() {
+    this.setEmail = function(email) {
+      self.user = self.email = email
+      self.update()
+    }.bind(this)
+
+    function send() {
+      votesSent = 0
+      for(i in self.votes) {
+        var item = self.votes[i]
+
+        var xmlhttp = new XMLHttpRequest()
+        xmlhttp.open("POST", opts.url, true)
+
+        xmlhttp.onload = function() {
+          if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
+            voted++
+            if (votesSent == 3) {
+              reset()
+              self.voted = true
+            }
+          }
+        }
+
+        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xmlhttp.send(JSON.stringify({voter: self.user, points: item.points, projectId: item.id}))
+      }
+    }
+
+    this.add = function(e) {
       error = false
 
       if (self.votes.length < 3) {
@@ -27,48 +58,40 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <author
         error = true
       }
 
-      return !error
-    }
+      if (!error) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "http://localhost:8080/api/v1/votes/" + self.user + "/allowed";
 
-    this.setEmail = function(email) {
-      self.user = self.email = email
-      self.update()
-    }.bind(this)
-
-    this.add = function(e) {
-      if (!validate()) {
-        return false
-      }
-      for(i in this.votes) {
-        var item = this.votes[i]
-
-        var xmlhttp = new XMLHttpRequest()
-        xmlhttp.open("POST", opts.url, true)
-
-        xmlhttp.onload = function() {
-          if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
-            console.log("voted" + item.title)
+        xmlhttp.onreadystatechange = function() {
+          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            send()
+          } else {
+            self.messages = [{message: "Olet jo äänestänyt"}]
+            self.voted = true
           }
         }
-
-        xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xmlhttp.send(JSON.stringify({voter: self.user, points: item.points, projectId: item.id}))
+        xmlhttp.open("GET", url, true)
+        xmlhttp.send()
       }
-
-      reset()
     }.bind(this)
 
     this.whatShow = function(item) {
       return !item.hidden
     }.bind(this)
 
-    this.reset = function() {
-      this.votes = []
-      this.user = this.email = ""
-      for(i in this.items) {
-        this.items[i].points = 0
-      }
+    this.resetForm = function(e) {
+      reset()
     }.bind(this)
+
+    function reset() {
+      self.errors = []
+      self.votes = []
+      self.user = self.email = ""
+      for(i in self.items) {
+        self.items[i].points = 0
+      }
+      self.update()
+    }
 
     this.toggle = function(e) {
       var item = e.item
@@ -91,7 +114,18 @@ riot.tag2('errors', '<div class="alert alert-danger" role="alert" each="{parent.
     }.bind(this)
 });
 
-riot.tag2('authorize', '<button class="btn btn-success" onclick="{auth}">Authorize</button>', '', '', function(opts) {
+riot.tag2('messages', '<div class="alert alert-danger" role="alert" each="{parent.messages}"> <a href="#" class="close" onclick="{close}">&times;</a> {message} </div>', '', '', function(opts) {
+    var self = this
+
+    this.close = function(e) {
+      var index = self.parent.messages.indexOf(e.item);
+      if (index > -1) {
+        self.parent.messages.splice(index, 1);
+      }
+    }.bind(this)
+});
+
+riot.tag2('authorize', '<button class="btn btn-success" onclick="{auth}">Hae sähköpostisi googlesta</button>', '', '', function(opts) {
     var self = this
 
     this.auth = function() {

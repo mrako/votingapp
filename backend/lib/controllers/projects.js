@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('lodash');
+
 var database = require('../database');
 var sequelize = require('../models/sequelize');
 
@@ -13,7 +15,7 @@ function *toJSON(project) {
     id: project.id,
     title: project.title,
     team: project.team,
-    votes: project.get('votecount')
+    points: project.get('votecount')
   };
 }
 
@@ -69,17 +71,20 @@ exports.results = function *() {
   var options = {
     attributes: ['id', 'title', 'team', [sequelize.fn('sum', sequelize.col('votes.points')), 'votecount']],
     include: [{attributes: [], model: database.Vote}],
-    group: ['project.id'],
-    order: ['votecount']
+    group: ['project.id']
+    //,order: [[sequelize.fn('sum', sequelize.col('votes.points')), 'DESC']]
   };
 
   results = yield database.Project.findAll(options);
 
+  var map = yield results.map(toJSON)
+  map = _.sortBy(map, function(o) { return o.points; });
+
   this.body = {
-    results: yield results.map(toJSON),
+    results: map,
     metadata: {
       resultset: {
-        count: results.length
+        count: map.length
       }
     }
   };

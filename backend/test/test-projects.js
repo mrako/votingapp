@@ -47,5 +47,6 @@ describe('Project', function() {
     var response = yield agent.get('/api/v1/results').expect(200).end();
 
     assert.equal(response.body.results.length, 3);
+    assert.equal(response.body.results[0].id, project2.id);
   });
 });

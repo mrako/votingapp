@@ -1,5 +1,0 @@
-FROM postgres:9.4
-
-ENV POSTGRES_USER votingapp
-ENV POSTGRES_PASSWORD votingapp
-ENV POSTGRES_DB votingapp

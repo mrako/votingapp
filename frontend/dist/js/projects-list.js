@@ -66,7 +66,6 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             send()
           } else {
-            self.messages = [{message: "Olet jo äänestänyt"}]
             self.voted = true
           }
         }

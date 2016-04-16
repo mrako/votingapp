@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>IHP Results</title>
+  <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="app/css/main.css" />
+
+  <script src="https://apis.google.com/js/client.js"></script>
+</head>
+
+<body>
+    <!-- mount point -->
+    <div class="container">
+      <results-list></results-list>
+    </div>
+    <!-- include riot.js and the compiler -->
+    <script src="../node_modules/riot/riot.min.js"></script>
+    <script src="../dist/js/results-list.js"></script>
+    <!-- mount normally -->
+    <script>
+    var xmlhttp = new XMLHttpRequest();
+    var url = "http://localhost:8080/api/v1/results";
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var response = JSON.parse(xmlhttp.responseText);
+            console.log(response.results);
+            loadResults(response.results);
+        }
+    }
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
+
+    function loadResults(results) {
+        riot.mount('results-list', {
+            title: 'Äänestyksen tulokset',
+            results: results
+        });
+    }
+    </script>
+</body>
+
+</html>

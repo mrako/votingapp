@@ -104,7 +104,6 @@
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             send()
           } else {
-            self.messages = [{message: "Olet jo äänestänyt"}]
             self.voted = true
           }
         }

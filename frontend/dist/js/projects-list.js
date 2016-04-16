@@ -60,7 +60,7 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
 
       if (!error) {
         var xmlhttp = new XMLHttpRequest();
-        var url = "http://192.168.99.100:8080/api/v1/votes/" + self.user + "/allowed";
+        var url = "http://52.30.177.248:8080/api/v1/votes/" + self.user + "/allowed";
 
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {

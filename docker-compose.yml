@@ -6,15 +6,11 @@ backend:
    - db
   ports:
    - "8080:8080"
-  volumes:
-    - ./backend:/usr/src/app
 
 frontend:
   build: frontend
   ports:
    - "3000:3000"
-  volumes:
-    - ./frontend:/usr/src/app
 
 db:
   image: postgres:9.4
@@ -22,3 +18,5 @@ db:
     - POSTGRES_USER=votingapp
     - POSTGRES_PASSWORD=votingapp
     - POSTGRES_DB=votingapp
+  volumes:
+    - db_data:/var/lib/postgresql/data

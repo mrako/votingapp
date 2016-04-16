@@ -1,7 +1,7 @@
 backend:
   build: backend
   environment:
-    - DATABASE_URL=postgres://votingapp@votingapp/votingapp
+    - DATABASE_URL=postgres://votingapp:votingapp@db/votingapp
   links:
    - db
   ports:
@@ -11,8 +11,6 @@ backend:
 
 frontend:
   build: frontend
-  links:
-   - backend
   ports:
    - "3000:3000"
   volumes:

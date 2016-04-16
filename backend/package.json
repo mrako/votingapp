@@ -10,8 +10,8 @@
   },
   "main": "server.js",
   "scripts": {
-    "test:xunit": "DATABASE_URL=${DATABASE_URL:-postgres://votingapp:votingapp@db/votingapp_test} ./node_modules/mocha/bin/mocha -R xunit > test-results.xml",
-    "test": "DATABASE_URL=${DATABASE_URL:-postgres://votingapp:votingapp@db/votingapp_test} ./node_modules/mocha/bin/mocha",
+    "test:xunit": "DATABASE_URL=${DATABASE_URL:-postgres://votingapp:votingapp@localhost/votingapp_test} ./node_modules/mocha/bin/mocha -R xunit > test-results.xml",
+    "test": "DATABASE_URL=${DATABASE_URL:-postgres://votingapp:votingapp@localhost/votingapp_test} ./node_modules/mocha/bin/mocha",
     "start": "node server.js"
   },
   "engines": {

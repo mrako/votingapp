@@ -78,7 +78,7 @@ exports.results = function *() {
   results = yield database.Project.findAll(options);
 
   var map = yield results.map(toJSON)
-  map = _.sortBy(map, function(o) { return o.points || 0; }).reverse();
+  map = _.sortBy(map, function(o) { return parseInt(o.points) || 0; }).reverse();
 
   this.body = {
     results: map,

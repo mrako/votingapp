@@ -42,8 +42,8 @@ describe('Project', function() {
 
 
   it("should get a list of results", function *() {
-    yield agent.post('/api/v1/votes').send({projectId: project2.id, voter: "tomme@email.com", points: 3}).expect(201).end();
-    yield agent.post('/api/v1/votes').send({projectId: project3.id, voter: "tomme@email.com", points: 1}).expect(201).end();
+    yield agent.post('/api/v1/votes').send({projectId: project2.id, voter: "tomme@email.com", points: 20}).expect(201).end();
+    yield agent.post('/api/v1/votes').send({projectId: project3.id, voter: "tomme@email.com", points: 5}).expect(201).end();
 
     var response = yield agent.get('/api/v1/results').expect(200).end();
 

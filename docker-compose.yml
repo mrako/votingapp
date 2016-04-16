@@ -1,0 +1,26 @@
+version: "2"
+services:
+    postgres:
+        image: postgres:9.4
+        environment:
+            POSTGRES_USER: votingapp
+            POSTGRES_PASSWORD: votingapp
+            POSTGRES_DB: votingapp
+        volumes:
+            - "db_data:/var/lib/postgres/data"
+
+    frontend:
+        build: frontend
+        ports:
+          - "3000:3000"
+
+    backend:
+        build: backend
+        links:
+            - postgres
+        ports:
+            - "8080:8080"
+
+
+volumes:
+    db_data:

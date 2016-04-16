@@ -43,10 +43,12 @@ describe('Project', function() {
 
   it("should get a list of results", function *() {
     yield agent.post('/api/v1/votes').send({projectId: project2.id, voter: "tomme@email.com", points: 3}).expect(201).end();
+    yield agent.post('/api/v1/votes').send({projectId: project3.id, voter: "tomme@email.com", points: 1}).expect(201).end();
 
     var response = yield agent.get('/api/v1/results').expect(200).end();
 
     assert.equal(response.body.results.length, 3);
     assert.equal(response.body.results[0].id, project2.id);
+    assert.equal(response.body.results[1].id, project3.id);
   });
 });

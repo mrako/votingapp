@@ -1,26 +1,26 @@
-version: "2"
-services:
-    postgres:
-        image: postgres:9.4
-        environment:
-            POSTGRES_USER: votingapp
-            POSTGRES_PASSWORD: votingapp
-            POSTGRES_DB: votingapp
-        volumes:
-            - "db_data:/var/lib/postgres/data"
+backend:
+  build: backend
+  environment:
+    - DATABASE_URL=postgres://votingapp@votingapp/votingapp
+  links:
+   - db
+  ports:
+   - "8080:8080"
+  volumes:
+    - ./backend:/usr/src/app
 
-    frontend:
-        build: frontend
-        ports:
-          - "3000:3000"
+frontend:
+  build: frontend
+  links:
+   - backend
+  ports:
+   - "3000:3000"
+  volumes:
+    - ./frontend:/usr/src/app
 
-    backend:
-        build: backend
-        links:
-            - postgres
-        ports:
-            - "8080:8080"
-
-
-volumes:
-    db_data:
+db:
+  image: postgres:9.4
+  environment:
+    - POSTGRES_USER=votingapp
+    - POSTGRES_PASSWORD=votingapp
+    - POSTGRES_DB=votingapp

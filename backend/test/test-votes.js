@@ -18,9 +18,9 @@ describe('Vote', function() {
 
     user = yield database.User.create({ email: 'user@mrako.com', password: 'test' });
 
-    project1 = yield database.Project.create({ name: 'test project 1', team: 'no team' });
-    project2 = yield database.Project.create({ name: 'test project 2', team: 'no team' });
-    project3 = yield database.Project.create({ name: 'test project 3', team: 'no team' });
+    project1 = yield database.Project.create({ title: 'test project 1', team: 'no team' });
+    project2 = yield database.Project.create({ title: 'test project 2', team: 'no team' });
+    project3 = yield database.Project.create({ title: 'test project 3', team: 'no team' });
   });
 
   beforeEach(function *() {

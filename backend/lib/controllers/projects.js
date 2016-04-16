@@ -1,6 +1,8 @@
 'use strict';
 
 var database = require('../database');
+var sequelize = require('../models/sequelize');
+
 var ClientError = require('../client-error');
 var form = require('../form');
 
@@ -10,7 +12,8 @@ function *toJSON(project) {
   return {
     id: project.id,
     title: project.title,
-    team: project.team
+    team: project.team,
+    votes: project.get('votecount')
   };
 }
 
@@ -41,6 +44,42 @@ exports.all = function *() {
         count: result.count,
         offset: offset,
         limit: limit
+      }
+    }
+  };
+};
+
+/**
+ * @api {get} /api/v1/results Read results
+ * @apiVersion 0.0.1
+ * @apiName GetResults
+ * @apiGroup results
+ *
+ */
+exports.results = function *() {
+  if (this.errors) {
+    throw new ClientError('VALIDATION_ERROR', 400, this.errors);
+  }
+
+  var results;
+  var query = this.query || {};
+  var limit = query.limit || query.max || LIMIT;
+  var offset = query.offset || 0;
+
+  var options = {
+    attributes: ['id', 'title', 'team', [sequelize.fn('sum', sequelize.col('votes.points')), 'votecount']],
+    include: [{attributes: [], model: database.Vote}],
+    group: ['project.id'],
+    order: ['votecount']
+  };
+
+  results = yield database.Project.findAll(options);
+
+  this.body = {
+    results: yield results.map(toJSON),
+    metadata: {
+      resultset: {
+        count: results.length
       }
     }
   };

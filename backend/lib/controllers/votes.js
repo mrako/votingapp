@@ -29,43 +29,6 @@ exports.allowed = function *() {
 };
 
 /**
- * @api {get} /api/v1/results Read results
- * @apiVersion 0.0.1
- * @apiName GetResults
- * @apiGroup results
- *
- */
-exports.results = function *() {
-  if (this.errors) {
-    throw new ClientError('VALIDATION_ERROR', 400, this.errors);
-  }
-
-  var result;
-  var query = this.query || {};
-  var limit = query.limit || query.max || LIMIT;
-  var offset = query.offset || 0;
-
-  var options = {
-    limit: limit,
-    offset: offset,
-    where: {}
-  };
-
-  result = yield database.Vote.findAndCountAll(options);
-
-  this.body = {
-    results: yield result.rows.map(toJSON),
-    metadata: {
-      resultset: {
-        count: result.count,
-        offset: offset,
-        limit: limit
-      }
-    }
-  };
-};
-
-/**
  * @api {post} /api/v1/votes Create voting Information
  * @apiVersion 0.0.1
  * @apiName CreateVote

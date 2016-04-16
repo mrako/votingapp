@@ -37,8 +37,8 @@ publicRouter.post('/signup', auth.signUp);
 publicRouter.post('/facebook/signin', auth.facebookSignIn);
 
 publicRouter.get('/projects', projects.all);
+publicRouter.get('/results', projects.results);
 
-publicRouter.get('/results', votes.results);
 publicRouter.get('/votes/:email/allowed', votes.allowed);
 publicRouter.post('/votes', votes.create);
 

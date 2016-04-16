@@ -9,6 +9,7 @@ var Project = exports.Project = require('./models/project');
 var Vote = exports.Vote = require('./models/vote');
 
 Vote.belongsTo(Project);
+Project.hasMany(Vote);
 
 exports.sessionStore = sequelizeStore.create(sequelize, {
   table: 'sessions',

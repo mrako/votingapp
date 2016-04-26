@@ -21,7 +21,8 @@
     <!-- mount normally -->
     <script>
     var xmlhttp = new XMLHttpRequest();
-    var url = "http://52.30.177.248:8080/api/v1/projects";
+    //var ENDPOINT_URI = "http://52.30.177.248:8080"
+    var ENDPOINT_URI = "http://192.168.99.100:8080"
 
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -29,14 +30,14 @@
             loadProjects(response.results);
         }
     }
-    xmlhttp.open("GET", url, true);
+    xmlhttp.open("GET", ENDPOINT_URI + "/api/v1/projects", true);
     xmlhttp.send();
 
     function loadProjects(projects) {
         riot.mount('projects-list', {
-            title: 'Äänestä kolmea suosikkiasi',
+            title: 'Vote for your three favorites',
             projects: projects,
-            url: 'http://52.30.177.248:8080/api/v1/votes'
+            url: ENDPOINT_URI + '/api/v1/votes'
         });
     }
     </script>

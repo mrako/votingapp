@@ -11,12 +11,12 @@
 
     <form onsubmit={ add } class="form-inline pull-right">
       <div class="form-group">
-        <input name="name" type="text" class="form-control" placeholder="Sähköposti" value={email}>
+        <input name="name" type="text" class="form-control" placeholder="Email" value={email}>
       </div>
 
-      <button class="btn btn-success">Lähetä</button>
+      <button class="btn btn-success">Send</button>
 
-      <button onclick={ resetForm } class="btn btn-danger">Peruuta</button>
+      <button onclick={ resetForm } class="btn btn-danger">Cancel</button>
     </form>
 
     <div class="clearfix"></div>
@@ -65,8 +65,6 @@
       for(i in self.votes) {
         var item = self.votes[i]
 
-        console.log("sending");
-
         var xmlhttp = new XMLHttpRequest()
         xmlhttp.open("POST", opts.url, true)
 
@@ -99,7 +97,7 @@
 
       if (!error) {
         var xmlhttp = new XMLHttpRequest();
-        var url = "http://52.30.177.248:8080/api/v1/votes/" + self.user + "/allowed";
+        var url = opts.url + "/" + self.user + "/allowed";
 
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {

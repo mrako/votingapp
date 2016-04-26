@@ -28,14 +28,12 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
       for(i in self.votes) {
         var item = self.votes[i]
 
-        console.log("sending");
-
         var xmlhttp = new XMLHttpRequest()
         xmlhttp.open("POST", opts.url, true)
 
         xmlhttp.onload = function() {
           if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
-            voted++
+            votesSent++
             if (votesSent == 3) {
               reset()
               self.voted = true
@@ -62,7 +60,7 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
 
       if (!error) {
         var xmlhttp = new XMLHttpRequest();
-        var url = "http://52.30.177.248:8080/api/v1/votes/" + self.user + "/allowed";
+        var url = opts.url + "/" + self.user + "/allowed";
 
         xmlhttp.onreadystatechange = function() {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {

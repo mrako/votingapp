@@ -2,5 +2,5 @@
   "name": "nodejs-template-project",
   "version": "0.0.1",
   "description": "NODEJS TEMPLATE PROJECT REST API",
-  "url" : "https://localhost:8080"
+  "url" : "https://192.168.99.100:8080"
 }

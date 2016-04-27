@@ -64,9 +64,6 @@ exports.results = function *() {
   }
 
   var results;
-  var query = this.query || {};
-  var limit = query.limit || query.max || LIMIT;
-  var offset = query.offset || 0;
 
   var options = {
     attributes: ['id', 'title', 'team', [sequelize.fn('sum', sequelize.col('votes.points')), 'votecount']],
@@ -77,7 +74,7 @@ exports.results = function *() {
 
   results = yield database.Project.findAll(options);
 
-  var map = yield results.map(toJSON)
+  var map = yield results.map(toJSON);
   map = _.sortBy(map, function(o) { return parseInt(o.points) || 0; }).reverse();
 
   this.body = {

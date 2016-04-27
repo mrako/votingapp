@@ -1,4 +1,5 @@
 'use strict';
+
 var _ = require('lodash');
 var ClientError = require('./client-error');
 
@@ -11,7 +12,7 @@ module.exports = function(body, keys, assign) {
 
   keys.forEach(function(key) {
     var val = body[toCamel(key)];
-    if(!_.isUndefined(val) && !_.isNaN(val)) attributes[key] = val;
+    if(!_.isUndefined(val) && !_.isNaN(val)) { attributes[key] = val; }
   });
 
   if(assign) {
@@ -23,14 +24,14 @@ module.exports = function(body, keys, assign) {
 
 module.exports.relation = function*(id, model) {
   var inst = yield model.find({where: {id: id}});
-  if(!inst) throw new ClientError('MODEL_NOT_FOUND', 400, model.getTableName());
+  if(!inst) { throw new ClientError('MODEL_NOT_FOUND', 400, model.getTableName()); }
   return inst;
 };
 
 module.exports.ids = function*(ids, model) {
   return yield ids.map(function*(id) {
     var inst = yield model.find({where: {id: id}});
-    if(!inst) throw new ClientError('MODEL_NOT_FOUND', 400, model.getTableName());
+    if(!inst) { throw new ClientError('MODEL_NOT_FOUND', 400, model.getTableName()); }
     return inst;
   });
 };

@@ -10,7 +10,7 @@ function isTypeOf(type) {
 }
 
 Validator.prototype.isArray = function(type, tip) {
-  if(!this.goOn) return this;
+  if(!this.goOn) { return this; }
 
   if(!Array.isArray(this.value)) {
     this.addError(tip || this.key + ' should be an Array of ' + type);
@@ -21,7 +21,7 @@ Validator.prototype.isArray = function(type, tip) {
 };
 
 Validator.prototype.isJSON = function(tip) {
-  if(!this.goOn) return this;
+  if(!this.goOn) { return this; }
 
   if(!_.isPlainObject(this.value)) {
     this.addError(tip || this.key + ' should be an Object');
@@ -31,7 +31,7 @@ Validator.prototype.isJSON = function(tip) {
 };
 
 Validator.prototype.isString = function(tip) {
-  if(!this.goOn) return this;
+  if(!this.goOn) { return this; }
 
   if(!_.isString(this.value)) {
     this.addError(tip || this.key + ' should be a String');
@@ -41,7 +41,7 @@ Validator.prototype.isString = function(tip) {
 };
 
 Validator.prototype.isIn = function(arr, tip) {
-  if(!this.goOn) return this;
+  if(!this.goOn) { return this; }
 
   if(arr.indexOf(this.value) < 0) {
     this.addError(tip || this.key + ' should be one of ' + arr.join(', '));
@@ -51,7 +51,7 @@ Validator.prototype.isIn = function(arr, tip) {
 };
 
 Validator.prototype.isBoolean = function(tip) {
-  if(!this.goOn) return this;
+  if(!this.goOn) { return this; }
 
   if(!_.isBoolean(this.value)) {
     this.addError(tip || this.key + ' should be a Boolean');
@@ -60,9 +60,9 @@ Validator.prototype.isBoolean = function(tip) {
 };
 
 Validator.prototype.allowNull = function() {
-  if(!this.goOn) return this;
+  if(!this.goOn) { return this; }
 
-  if(_.isNull(this.value)) this.goOn = false;
+  if(_.isNull(this.value)) { this.goOn = false; }
 
   return this;
 };

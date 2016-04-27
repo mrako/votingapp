@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp');
 
 var jshint = require('gulp-jshint');
@@ -10,7 +12,7 @@ gulp.task('db:prepare', function(done) {
 });
 */
 gulp.task('jshint', function() {
-  return gulp.src(['lib/**/*.js'])
+  return gulp.src(['lib/**/*.js', 'test/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(jshint.reporter('fail'));
@@ -18,8 +20,8 @@ gulp.task('jshint', function() {
 
 gulp.task('apidoc', function(done) {
   apidoc({
-    src: "lib/",
-    dest: "doc/"
+    src: 'lib/',
+    dest: 'doc/'
   }, done);
 });
 

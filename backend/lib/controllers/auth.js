@@ -20,10 +20,10 @@ exports.session = genericSession({
 
     get: function() {
       var header = this.header.authorization;
-      if(!header) return;
+      if(!header) { return; }
 
       var match = header.match(TOKEN_REGEX);
-      if(_.isNull(match)) return;
+      if(_.isNull(match)) { return; }
 
       return match[1];
     },
@@ -121,8 +121,7 @@ exports.login = function *() {
   this.checkBody('email').isEmail('INVALID_EMAIL');
   this.checkBody('password').notEmpty('REQUIRED_FIELD').isString();
 
-  if (this.errors)
-    throw new ClientError('VALIDATION_ERROR', 400, this.errors);
+  if (this.errors) { throw new ClientError('VALIDATION_ERROR', 400, this.errors); }
 
   var body = this.request.body;
   var user = yield database.User.find({where: {email: body.email.toLowerCase()}});
@@ -139,7 +138,7 @@ exports.login = function *() {
   yield this.logIn(user);
 
   this.response.body = yield toJSON(user, this.sessionId);
-  
+
   this.status = 200;
 };
 
@@ -148,8 +147,8 @@ passport.use(new FacebookStrategy(
     clientID: config.FACEBOOK_APP_ID,
     clientSecret: config.FACEBOOK_APP_SECRET
   },
-  function(accessToken, refreshToken, profile, done) {    
-    database.User.find({where: {facebook_id: profile.id}}).then(
+  function(accessToken, refreshToken, profile, done) {
+    database.User.find({where: {facebookId: profile.id}}).then(
 
       function(user) {
         if (user) { return done(null, user); }
@@ -168,7 +167,7 @@ passport.use(new FacebookStrategy(
           if(user) {
             return user.updateAttributes(options);
           } else {
-            if(email) options.email = email;
+            if(email) { options.email = email; }
             return database.User.create(options);
           }
         })

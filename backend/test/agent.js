@@ -1,4 +1,5 @@
 'use strict';
+
 var methods = require('methods');
 var TestAgent = require('co-supertest').agent;
 var app = require('../lib/app');
@@ -22,9 +23,10 @@ methods.forEach(function(method) {
     }
 
     return req.expect(function onlyAcceptJson(res) {
-      if(res.status === 204) return;
-      if(res.type !== 'application/json')
+      if(res.status === 204) { return; }
+      if(res.type !== 'application/json') {
         return 'All API endpoints must return a valid JSON or 204. Content type: ' + res.type;
+      }
     });
   };
 });

@@ -25,16 +25,16 @@ describe('Project', function() {
     yield helpers.logout(agent);
   });
 
-  it("should get a list of projects", function *() {
+  it('should get a list of projects', function *() {
     var url = `/api/v1/projects`;
 
     var response = yield agent.get(url).expect(200).end();
     assert.equal(response.body.results.length, 3);
   });
 
-  it("should get a list of results", function *() {
-    yield agent.post('/api/v1/votes').send({projectId: project2.id, voter: "tomme@email.com", points: 20}).expect(201).end();
-    yield agent.post('/api/v1/votes').send({projectId: project3.id, voter: "tomme@email.com", points: 5}).expect(201).end();
+  it('should get a list of results', function *() {
+    yield agent.post('/api/v1/votes').send({projectId: project2.id, voter: 'tomme@email.com', points: 20}).expect(201).end();
+    yield agent.post('/api/v1/votes').send({projectId: project3.id, voter: 'tomme@email.com', points: 5}).expect(201).end();
 
     var response = yield agent.get('/api/v1/results').expect(200).end();
 
@@ -43,13 +43,13 @@ describe('Project', function() {
     assert.equal(response.body.results[1].id, project3.id);
   });
 /*
-  it("shouldn't create project by unauthorized", function *() {
-    var params = {title: "projecttitle", team: "no team"};
+  it('shouldn't create project by unauthorized', function *() {
+    var params = {title: 'projecttitle', team: 'no team'};
     yield agent.post('/api/v1/project').send(params).expect(401).end();
   });
 */
   it('should create vehicle for user', function *() {
-    var params = {title: "projecttitle", team: "no team"};
+    var params = {title: 'projecttitle', team: 'no team'};
     //var user = yield helpers.login(agent);
     var response = yield agent.post('/api/v1/projects').send(params).expect(201).end();
 

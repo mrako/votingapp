@@ -19,12 +19,6 @@ var User = sequelize.define('users', {
     field: 'facebook_id'
   },
   role: Sequelize.STRING
-}, {
-  instanceMethods: {
-    passwordMatch: function(password) {
-      return bcrypt.compareSync(password, this.password);
-    }
-  }
 });
 
 module.exports = User;

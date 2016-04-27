@@ -18,5 +18,13 @@
   "strict": true,
   "trailing": true,
   "smarttabs": true,
-  "noyield": true
+  "noyield": true,
+  "globals"   : {
+    "describe"   : false,
+    "it"         : false,
+    "before"     : false,
+    "beforeEach" : false,
+    "after"      : false,
+    "afterEach"  : false
+  }
 }

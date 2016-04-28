@@ -48,7 +48,7 @@ describe('Project', function() {
     yield agent.post('/api/v1/project').send(params).expect(401).end();
   });
 */
-  it('should create vehicle for user', function *() {
+  it('should create project for user', function *() {
     var params = {title: 'projecttitle', team: 'no team'};
     //var user = yield helpers.login(agent);
     var response = yield agent.post('/api/v1/projects').send(params).expect(201).end();

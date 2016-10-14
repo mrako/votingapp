@@ -18,28 +18,52 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
       }
     }
 
+    this.isAllowedToVote = function(email) {
+      var xmlhttp = new XMLHttpRequest();
+      var url = opts.url + "/" + self.user + "/allowed";
+
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+          send()
+        }
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 405) {
+          self.errors.push({message: "Olet jo äänestänyt"})
+          self.update()
+        }
+      }
+      xmlhttp.open("GET", url, true)
+      xmlhttp.send()
+    }.bind(this)
+
     this.setEmail = function(email) {
       self.user = self.email = email
       self.update()
     }.bind(this)
 
+    function reqListener () {
+      console.log(this.status);
+    }
+
     function send() {
-      votesSent = 0
+      
+      self.votesSent = 0
+
       for(i in self.votes) {
         var item = self.votes[i]
 
         var xmlhttp = new XMLHttpRequest()
         xmlhttp.open("POST", opts.url, true)
 
-        xmlhttp.onload = function() {
-          if (xmlhttp.status >= 200 && xmlhttp.status < 400) {
-            votesSent++
-            if (votesSent == 3) {
+        xmlhttp.addEventListener("load", function() {
+          if (this.status >= 200 && this.status < 400) {
+            self.voted = true
+
+            self.votesSent++
+            if (self.votesSent >= 3) {
               reset()
-              self.voted = true
             }
           }
-        }
+        });
 
         xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
         xmlhttp.send(JSON.stringify({voter: self.user, points: item.points, projectId: item.id}))
@@ -59,20 +83,7 @@ riot.tag2('projects-list', '<h1>{opts.title}</h1> <hr> <errors></errors> <messag
       }
 
       if (!error) {
-        var xmlhttp = new XMLHttpRequest();
-        var url = opts.url + "/" + self.user + "/allowed";
-
-        xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            send()
-          }
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 405) {
-            self.errors.push({message: "Olet jo äänestänyt"})
-            self.update()
-          }
-        }
-        xmlhttp.open("GET", url, true)
-        xmlhttp.send()
+        self.isAllowedToVote()
       }
     }.bind(this)
 
@@ -139,6 +150,8 @@ riot.tag2('authorize', '<button class="btn btn-success" onclick="{auth}">Hae sä
           gapi.client.oauth2.userinfo.get().execute(function(resp) {
             console.log(resp.email)
             self.parent.setEmail(resp.email)
+
+            self.parent.isAllowedToVote()
           })
         });
       })

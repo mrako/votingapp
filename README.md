@@ -29,16 +29,35 @@ Welcome to the Votingapp example project.
     psql -c "CREATE DATABASE votingapp WITH OWNER votingapp"
     psql -c "CREATE DATABASE votingapp_test WITH OWNER votingapp"
 
-### Backend
+### Running (Backend & Frontend)
 
     npm start
 
-### Frontend
+## Rancher
 
-    npm run serve
+### Build
 
+    dc build
 
-    ssh -i "eficodedocker.pem" ubuntu@ec2-52-30-177-248.eu-west-1.compute.amazonaws.com
-    sudo docker-compose up -d
+### Tag
 
+    docker tag votigapp_frontend mrako/votigapp_frontend
+    docker tag votigapp_backend mrako/votigapp_backend
+
+### Push to registry
+
+    docker push mrako/votigapp_frontend
+    docker push mrako/votigapp_backend
+
+### Upgrade
+
+    rancher-compose -f docker-compose.swarm.yml up --force-upgrade --pull
+
+### Confirm
+
+    rancher-compose -f docker-compose.swarm.yml up --confirm-upgrade
+
+### Rollback
+
+    rancher-compose -f docker-compose.swarm.yml up --rollback
 

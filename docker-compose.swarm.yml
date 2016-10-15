@@ -10,6 +10,8 @@ backend:
   environment:
     DATABASE_URL: postgres://votingapp:votingapp@db/votingapp
   image: mrako/votingapp_backend
+  ports:
+  - 8080:8080
   links:
   - db:db
 frontend:

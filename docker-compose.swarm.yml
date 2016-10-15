@@ -1,0 +1,20 @@
+db:
+  environment:
+    POSTGRES_DB: votingapp
+    POSTGRES_PASSWORD: votingapp
+    POSTGRES_USER: votingapp
+  image: postgres:9.4
+  volumes:
+  - /opt/docker/dbdata:/var/lib/postgresql/data
+backend:
+  environment:
+    DATABASE_URL: postgres://votingapp:votingapp@db/votingapp
+  image: mrako/votingapp_backend
+  links:
+  - db:db
+frontend:
+  image: mrako/votingapp_frontend
+  ports:
+  - 3000:80
+  links:
+  - backend:backend

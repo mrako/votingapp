@@ -41,13 +41,13 @@ Welcome to the Votingapp example project.
 
 ### Tag
 
-    docker tag votigapp_frontend mrako/votigapp_frontend
-    docker tag votigapp_backend mrako/votigapp_backend
+    docker tag votingapp_frontend mrako/votingapp_frontend
+    docker tag votingapp_backend mrako/votingapp_backend
 
 ### Push to registry
 
-    docker push mrako/votigapp_frontend
-    docker push mrako/votigapp_backend
+    docker push mrako/votingapp_frontend
+    docker push mrako/votingapp_backend
 
 ### Upgrade
 
